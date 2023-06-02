@@ -2,7 +2,8 @@
 </script>
 
 <template>
-  <main>
-    <h1>Home Page</h1>
-  </main>
+  <div>
+    <h1 class="m-6">Home Page</h1>
+  </div>
+
 </template>
