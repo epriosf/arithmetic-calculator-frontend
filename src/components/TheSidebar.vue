@@ -1,15 +1,7 @@
-
-<template>
-  <div class="card flex justify-content-center my-menu">
-    <Menu :model="items"/>
-  </div>
-</template>
-
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import Menu from 'primevue/menu';
 const items = ref([
-
   {
     items: [
       {
@@ -40,6 +32,14 @@ const items = ref([
   }
 ]);
 </script>
+
+<template>
+  <div class="card flex justify-content-center my-menu">
+    <Menu :model="items"/>
+  </div>
+</template>
+
+
 <style scoped>
 .my-menu {
   height: 700px;
