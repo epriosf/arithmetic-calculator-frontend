@@ -13,6 +13,5 @@ import TheFooter from "@/components/TheFooter.vue";
       <RouterView />
     </div>
   </div>
-
   <TheFooter />
 </template>
