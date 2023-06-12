@@ -34,14 +34,7 @@ const items = ref([
 </script>
 
 <template>
-  <div class="card flex justify-content-center my-menu">
+  <div class="card flex justify-content-center h-full">
     <Menu :model="items"/>
   </div>
 </template>
-
-
-<style scoped>
-.my-menu {
-  height: 700px;
-}
-</style>
