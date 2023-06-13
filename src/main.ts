@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import PrimeVue from 'primevue/config'
 import { createPinia } from 'pinia'
 import { authentication } from '@/plugins/authentication'
+import ToastService from 'primevue/toastservice';
 //theme
 import 'primevue/resources/themes/lara-light-indigo/theme.css'
 //core
@@ -15,6 +16,7 @@ import router from './router'
 const app = createApp(App)
 app.use(PrimeVue)
 app.use(createPinia())
+app.use(ToastService);
 
 authentication.install().then(() => {
   app.use(router)
