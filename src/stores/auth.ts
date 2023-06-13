@@ -3,7 +3,7 @@ import {useApi, useApiPrivate} from '@/composables/useApi'
 
 export interface User {
   username: string
-  password: string
+  user_balance: string
 }
 
 export interface State {
