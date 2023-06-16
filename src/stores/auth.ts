@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import {useApi, useApiPrivate} from '@/composables/useApi'
 
 export interface User {
+  id: string
   username: string
   user_balance: string
 }
