@@ -20,8 +20,10 @@ const deleteRecordDialog = ref<boolean>(false)
 
 const page = ref<number>(0)
 const limit = ref<number>(5)
+const sortField = ref<string>('');
+const sortOrder = ref<number>(1);
 const rowsPerPageOptions = ref<number[]>([5, 10, 15, 20])
-const totalRecords = ref<number>(20)
+const totalRecords = ref<number>(0)
 const loading = ref<boolean>(false)
 const authStore = useAuthStore()
 
@@ -31,7 +33,7 @@ const user = computed(() => {
 const getRecordsService = async (): Promise<void> => {
   try {
     loading.value = true
-    const res = await getRecords(user.value.id, page.value, limit.value, {})
+    const res = await getRecords(user.value.id, page.value, limit.value, sortField.value, sortOrder.value, {})
     const formattedRecords: FormatRecord[] = res.records.map((record: Record) => {
       return {
         ...record,
@@ -80,6 +82,7 @@ const deleteRecordApi = async (): Promise<void> => {
   deleteRecordDialog.value = false
   selectedRecord.value = null
 }
+
 const handlePageChange = async (event): Promise<void> => {
   if (page.value !== event.page || limit.value !== event.rows) {
     page.value = event.page
@@ -87,6 +90,11 @@ const handlePageChange = async (event): Promise<void> => {
     await getRecordsService()
   }
 }
+const onSort = async(event): Promise<void> => {
+  sortField.value = event.sortField;
+  sortOrder.value = event.sortOrder === 1 ? 1 : -1;
+  await getRecordsService();
+};
 </script>
 
 <template>
@@ -105,6 +113,9 @@ const handlePageChange = async (event): Promise<void> => {
       tableStyle="min-width: 50rem"
       dataKey="_id"
       :onPage="handlePageChange"
+      :sortField="sortField"
+      :sortOrder="sortOrder"
+      @sort="onSort"
     >
       <template #header>
         <div class="flex justify-content-between">
