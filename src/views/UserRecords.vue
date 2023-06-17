@@ -12,7 +12,7 @@ import { formatDate } from '@/utils/formatDate'
 import { FormatRecord, Record } from '@/interfaces/Record'
 import { useAuthStore } from '@/stores/auth'
 import { computed } from 'vue'
-
+import debounce from 'lodash.debounce'
 const toast = useToast()
 const records = ref<FormatRecord[]>([])
 const selectedRecord = ref<Record | null>(null)
@@ -20,10 +20,12 @@ const deleteRecordDialog = ref<boolean>(false)
 
 const page = ref<number>(0)
 const limit = ref<number>(5)
-const sortField = ref<string>('');
-const sortOrder = ref<number>(1);
+const sortField = ref<string>('')
+const sortOrder = ref<number>(1)
 const rowsPerPageOptions = ref<number[]>([5, 10, 15, 20])
 const totalRecords = ref<number>(0)
+const searchText = ref<string>('')
+
 const loading = ref<boolean>(false)
 const authStore = useAuthStore()
 
@@ -33,7 +35,15 @@ const user = computed(() => {
 const getRecordsService = async (): Promise<void> => {
   try {
     loading.value = true
-    const res = await getRecords(user.value.id, page.value, limit.value, sortField.value, sortOrder.value, {})
+    const res = await getRecords(
+      user.value.id,
+      page.value,
+      limit.value,
+      sortField.value,
+      sortOrder.value,
+      searchText.value,
+      {}
+    )
     const formattedRecords: FormatRecord[] = res.records.map((record: Record) => {
       return {
         ...record,
@@ -47,6 +57,8 @@ const getRecordsService = async (): Promise<void> => {
     console.log(error)
   }
 }
+
+const debouncedGetRecordsService: typeof debounce = debounce(getRecordsService, 1000)
 
 onMounted(async (): Promise<void> => {
   await getRecordsService()
@@ -90,11 +102,22 @@ const handlePageChange = async (event): Promise<void> => {
     await getRecordsService()
   }
 }
-const onSort = async(event): Promise<void> => {
-  sortField.value = event.sortField;
-  sortOrder.value = event.sortOrder === 1 ? 1 : -1;
-  await getRecordsService();
-};
+const onSort = async (event): Promise<void> => {
+  sortField.value = event.sortField
+  sortOrder.value = event.sortOrder === 1 ? 1 : -1
+  await getRecordsService()
+}
+
+const handleSearch = (): void => {
+  if (searchText.value !== '') {
+    page.value = 0
+    debouncedGetRecordsService()
+  }
+}
+const clearSearchText = (): void => {
+  searchText.value = ''
+  getRecordsService()
+}
 </script>
 
 <template>
@@ -120,7 +143,14 @@ const onSort = async(event): Promise<void> => {
       <template #header>
         <div class="flex justify-content-between">
           <div>
-            <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined />
+            <Button
+              type="button"
+              icon="pi pi-filter-slash"
+              label="Clear"
+              outlined
+              :disabled="!searchText"
+              @click="clearSearchText"
+            />
             <Button
               label="Delete"
               icon="pi pi-trash"
@@ -132,10 +162,15 @@ const onSort = async(event): Promise<void> => {
           </div>
           <span class="p-input-icon-left">
             <i class="pi pi-search" />
-            <InputText placeholder="Keyword Search" />
+            <InputText
+              v-model.trim="searchText"
+              @input="handleSearch"
+              placeholder="Keyword search"
+            />
           </span>
         </div>
       </template>
+      <template #empty> No records found </template>
       <Column selectionMode="single" headerStyle="width: 3rem" class="text-center"></Column>
       <Column field="_id" header="Id" sortable style="width: 5%"></Column>
       <Column field="operation_id" header="Operation Id" sortable style="width: 15%"></Column>

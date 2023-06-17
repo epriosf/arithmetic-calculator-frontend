@@ -8,11 +8,12 @@ export const getRecords = async (
   limit: number = 5,
   sortField: string = '_id',
   sortOrder: number = 1 ,
+  searchText: string = '',
   payload: any
 ): Promise<Records> => {
   try {
     const response: AxiosResponse<Records> = await useApiPrivate().get(
-      `/api/records/${user_id}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}`,
+      `/api/records/${user_id}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}&searchText=${searchText}`,
       payload
     )
     return response.data
