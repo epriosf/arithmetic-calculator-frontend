@@ -116,6 +116,7 @@ const handleSearch = (): void => {
 }
 const clearSearchText = (): void => {
   searchText.value = ''
+  selectedRecord.value = null
   getRecordsService()
 }
 </script>
@@ -191,6 +192,7 @@ const clearSearchText = (): void => {
     :style="{ width: '450px' }"
     header="Confirm"
     :modal="true"
+    @hide="hideDeletedDialog"
   >
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
