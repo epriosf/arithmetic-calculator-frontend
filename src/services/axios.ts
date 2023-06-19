@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URI,
+  baseURL: `${import.meta.env.VITE_API_URI}/${import.meta.env.VITE_API_VERSION}`,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
 });
 
 export const axiosPrivateInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URI,
+  baseURL: `${import.meta.env.VITE_API_URI}/${import.meta.env.VITE_API_VERSION}`,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'

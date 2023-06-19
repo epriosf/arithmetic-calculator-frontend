@@ -13,7 +13,7 @@ export const getRecords = async (
 ): Promise<Records> => {
   try {
     const response: AxiosResponse<Records> = await useApiPrivate().get(
-      `/api/records/${user_id}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}&searchText=${searchText}`,
+      `/records/${user_id}?page=${page}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}&searchText=${searchText}`,
       payload
     )
     return response.data
@@ -24,7 +24,7 @@ export const getRecords = async (
 export const deleteRecord = async (record_id: string, payload: any): Promise<any> => {
   try {
     const response: AxiosResponse<any> = await useApiPrivate().post(
-      `/api/records/record/${record_id}`,
+      `/records/record/${record_id}`,
       payload
     )
     return response.data
