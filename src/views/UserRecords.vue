@@ -47,7 +47,8 @@ const getRecordsService = async (): Promise<void> => {
     const formattedRecords: FormatRecord[] = res.records.map((record: Record) => {
       return {
         ...record,
-        created_at: formatDate(record.created_at)
+        created_at: formatDate(record.created_at),
+        updated_at: formatDate(record.updated_at)
       }
     })
     records.value = formattedRecords
@@ -174,8 +175,8 @@ const clearSearchText = (): void => {
       <template #empty> No records found </template>
       <Column selectionMode="single" headerStyle="width: 3rem" class="text-center"></Column>
       <Column field="_id" header="Id" sortable style="width: 5%"></Column>
-      <Column field="operation_id" header="Operation Id" sortable style="width: 15%"></Column>
-      <Column field="user_id" header="User Id" sortable style="width: 15%"></Column>
+      <Column field="operation_type" header="Operation Type" sortable style="width: 15%"></Column>
+      <Column field="user_username" header="User email" sortable style="width: 15%"></Column>
       <Column field="amount" header="Amount" sortable style="width: 10%"></Column>
       <Column field="user_balance" header="User Balance" sortable style="width: 10%"></Column>
       <Column
@@ -185,6 +186,7 @@ const clearSearchText = (): void => {
         style="width: 15%"
       ></Column>
       <Column field="created_at" header="Created At" sortable style="width: 15%"></Column>
+      <Column field="updated_at" header="Updated At" sortable style="width: 15%"></Column>
     </DataTable>
   </div>
   <Dialog
